@@ -1,24 +1,16 @@
 import discord
 import json
 
+from discord.ext import commands
+
 # Token and the bot
 f = open("info.json")
 data = json.load(f)
 TOKEN = data['TOKEN']
 
-client = discord.Client()
+bot = commands.Bot(command_prefix="!")
 
-@client.event
-async def on_ready():
-    print("Welcome! we have logged on")
-
-@client.event
-async def on_message(ctx):
-    if ctx.author == client.user:
-        return
-    
-    if ctx.content.startswith("$hello"):
-        await ctx.channel.send('Hello!')
-
+# Adds the Cogs
+bot.load_extension("cogs.text")
 # Run the bot
-client.run(TOKEN)
+bot.run(TOKEN)
