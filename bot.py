@@ -11,6 +11,6 @@ TOKEN = data['TOKEN']
 bot = commands.Bot(command_prefix="!")
 
 # Adds the Cogs
-bot.load_extension("cogs.text")
+bot.load_extension("rnd")
 # Run the bot
 bot.run(TOKEN)
