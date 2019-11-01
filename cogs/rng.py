@@ -1,9 +1,18 @@
 import random
+import discord
 from discord.ext import commands
 
 class RNG(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print('Logging On')
+
+    @commands.command()
+    async def ping(self, ctx):
+        await ctx.send('Pong!')
 
     @commands.command()
     async def roll(self, dice : str):
@@ -11,16 +20,16 @@ class RNG(commands.Cog):
         try:
             rolls, limit = map(int, dice.split('d'))
         except Exception:
-            await self.bot.say('Format has to be in NdN!')
+            await dice.send('Format has to be in NdN!')
             return
 
         result = ', '.join(str(random.randint(1, limit)) for r in range(rolls))
-        await self.bot.say(result)
+        await dice.send(result)
 
     @commands.command(description='For when you wanna settle the score some other way')
     async def choose(self, *choices : str):
         """Chooses between multiple choices."""
-        await self.bot.say(random.choice(choices))
+        await choices.send(random.choice(choices))
 
 
 def setup(bot):
