@@ -1,16 +1,22 @@
+import random
+import discord
 from discord.ext import commands
 
 ###############
 # Text Cogs
 ################
-class Text():
+class Text(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
     
-    @commands.command
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print('... Added Text Cog ...')
+    
+    @commands.command()
     async def hello(self, ctx):
-        await self.bot.say("Hello")
+        await ctx.send("Hello")
 
     async def on_message(self, message):
         print(message.content)
