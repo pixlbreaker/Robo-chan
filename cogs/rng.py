@@ -19,6 +19,9 @@ class RNG(commands.Cog):
         """Rolls a dice in NdN format."""
         try:
             rolls, limit = map(int, dice.split('d'))
+            if rolls > 100 or limit > 100:
+                await ctx.send('Please give a number smaller than 100')
+                return
         except Exception:
             await ctx.send('Format has to be in NdN!')
             return
