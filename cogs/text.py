@@ -18,6 +18,10 @@ class Text(commands.Cog):
     async def hello(self, ctx):
         await ctx.send("Hello")
 
+    @commands.command()
+    async def uwu(self, ctx):
+        await ctx.send("Stop it Oni-chan ;)")
+
     async def on_message(self, message):
         print(message.content)
 
