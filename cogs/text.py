@@ -20,7 +20,7 @@ class Text(commands.Cog):
 
     @commands.command()
     async def uwu(self, ctx):
-        await ctx.send("Stop it Oni-chan ;)")
+        await ctx.send("Stop it Oni-chan ;)", tts="True")
 
     async def on_message(self, message):
         print(message.content)
