@@ -11,10 +11,6 @@ class RNG(commands.Cog):
         print('... Added RNG Cog ...')
 
     @commands.command()
-    async def ping(self, ctx):
-        await ctx.send('Pong!')
-
-    @commands.command()
     async def roll(self, ctx, dice : str):
         """Rolls a dice in NdN format."""
         try:
