@@ -16,6 +16,10 @@ class Text(commands.Cog):
         print('... Added Text Cog ...')
     
     @commands.command()
+    async def logout(self, ctx):
+        await self.bot.logout()
+    
+    @commands.command()
     async def hello(self, ctx):
         await ctx.send("Hello")
     
