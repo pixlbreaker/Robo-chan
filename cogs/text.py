@@ -11,6 +11,7 @@ class Text(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        self.tts = False
     
     @commands.Cog.listener()
     async def on_ready(self):
@@ -22,20 +23,30 @@ class Text(commands.Cog):
     
     @commands.command()
     async def hello(self, ctx):
-        await ctx.send("Hello")
+        await ctx.send("Hello", tts=self.tts)
     
     @commands.command()
     async def ping(self, ctx):
-        await ctx.send('Pong!')
+        await ctx.send('Pong!', tts=self.tts)
 
     @commands.command()
     async def uwu(self, ctx):
-        await ctx.send("Stop it Oni-chan ;)", tts="True")
+        await ctx.send("Stop it Oni-chan ;)", tts=self.tts)
     
     @commands.command()
     async def date(self, ctx):
         today = dt.datetime.today()
         await ctx.send(today.ctime())
+    
+    @commands.command()
+    async def tts_on(self, ctx):
+        self.tts = True
+        await ctx.send("Your wish is my command", tts=self.tts)
+    
+    @commands.command()
+    async def tts_off(self, ctx):
+        self.tts = False
+        await ctx.send("Your wish is my command", tts=self.tts)
     
     @commands.command()
     async def fact(self, ctx):

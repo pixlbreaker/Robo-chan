@@ -3,3 +3,4 @@
 *.pyc
 *.pyc
 /cogs/__pycache__/*.pyc
+info.json
