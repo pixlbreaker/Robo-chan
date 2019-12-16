@@ -1,3 +1,4 @@
+import os
 import random
 import discord
 import datetime as dt
@@ -36,10 +37,16 @@ class Text(commands.Cog):
         today = dt.datetime.today()
         await ctx.send(today.ctime())
     
-    # Trying to add reactions to a post
-    # @commands.command()
-    # async def love(self, ctx):
-    #     await self.bot.add_reaction('❤️')
+    @commands.command()
+    async def fact(self, ctx):
+        #From the program's perspective you are at bot.py
+        os.chdir("data")
+        f = open("facts.txt")
+        lines = f.readlines()
+        num = random.randint(0, len(lines))
+        await ctx.send(lines[num])
+
+
 
 def setup(bot):
     bot.add_cog(Text(bot))

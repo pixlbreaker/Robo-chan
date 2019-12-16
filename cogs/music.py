@@ -13,7 +13,7 @@ class Music(commands.Cog):
     
     @commands.command(pass_context=True)
     async def join(self, ctx):
-        '''Joins the users channel'''
+        """Joins the users channel"""
         channel = ctx.message.author.voice.channel
         if not channel:
             await ctx.send("You are not connected to a voice channel")
@@ -30,13 +30,11 @@ class Music(commands.Cog):
     
     @commands.command()
     async def leave(self, ctx):
-        server = ctx.message.server
-        voice_client = client.voice_client_in(server)
-        if voice_client:
-            await voice_client.disconnect()
-            print("Bot left the voice channel")
-        else:
-            print("Bot was not in channel")
+        """Disconnects the bot from the voice channel"""
+        channel = ctx.message.author.voice.channel
+        voice = get(self.bot.voice_clients, guild=ctx.guild)
+        if voice and voice.is_connected():
+            await voice.disconnect()
 
 def setup(bot):
     bot.add_cog(Music(bot))
