@@ -11,12 +11,6 @@ TOKEN = data['TOKEN']
 
 bot = commands.Bot(command_prefix="!")
 
-# bot.change_presence(activity=discord.Game(name='my game'))
-
-# # or, for watching:
-# activity = discord.Activity(name='my activity', type=discord.ActivityType.watching)
-# bot.change_presence(activity=activity)
-
 # Load function for extensions
 @bot.command
 async def load(ctx, extension):
