@@ -34,7 +34,14 @@ class Text(commands.Cog):
     @commands.command()
     async def uwu(self, ctx):
         """UWU XD"""
-        await ctx.send("Stop it Oni-chan ;)", tts=self.tts)
+        #From the program's perspective you are at bot.py
+        os.chdir("data")
+        f = open("uwu.txt")
+        lines = f.readlines()
+        num = random.randint(0, len(lines))
+        # Changes back to the root directory
+        os.chdir("..")
+        await ctx.send(lines[num], tts=self.tts)
     
     @commands.command()
     async def date(self, ctx):
