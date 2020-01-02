@@ -1,5 +1,6 @@
 import discord
 import youtube_dl
+import pafy
 from discord.ext import commands
 from discord import FFmpegPCMAudio
 from discord.utils import get
@@ -11,6 +12,7 @@ players = {}
 class Music(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.songs = {}
     
     @commands.Cog.listener()
     async def on_ready(self):
@@ -44,9 +46,22 @@ class Music(commands.Cog):
     
     @commands.command()
     async def play(self, ctx, url: str):
+        # video = pafy.new(url)
+        # #self.songs[video.title] = video
+        # audio = video.getbestaudio()
+        # audio.download(filepath="audio")
+        
+        guild = ctx.guild
+        voice_client: discord.VoiceClient = discord.utils.get(self.bot.voice_clients, guild=guild)
+        audio_source = discord.FFmpegPCMAudio('Eli Noir - Real (Lyrics) [CC].webm')
+        if not voice_client.is_playing():
+            voice_client.play(audio_source, after=None)
 
-        voice = get(self.bot.voice_clients, guild=ctx.guild)
-        voice.play(url)
+        
+        await ctx.send("Playing song")
+
+        # voice = get(self.bot.voice_clients, guild=ctx.guild)
+        # voice.play(url)
         # guild = ctx.message.guild
         # voice_client = guild.voice_client
         # player = await voice_client.create_ytdl_player(url)
