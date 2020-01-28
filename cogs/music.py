@@ -10,26 +10,36 @@ class Music(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.songs = []
-        #self.play_queue.start()
+        self.play_queue.start()
+    
+    def __playsong__(self, ctx, audio_path):
+        # Plays the audio in the channel
+        guild = ctx.guild
+        voice_client: discord.VoiceClient = discord.utils.get(self.bot.voice_clients, guild=guild)
+        audio_source = discord.FFmpegPCMAudio(audio_path)
+
+        #self.songs.append(audio_source)
+        if not voice_client.is_playing():
+            voice_client.play(audio_source, after=None)
+        else:
+            voice_client.pause()
+            voice_client.play(audio_source, after=None)
     
     @commands.Cog.listener()
     async def on_ready(self):
         print('... Added Music Cog ...')
     
 
-    @tasks.loop()
+    @tasks.loop(seconds=5.0)
     async def play_queue(self):
-        if len(self.songs) > 0:
+        # Checks if the bot is playing music
+        voice_client: discord.VoiceClient = discord.utils.get(self.bot.voice_clients)
+        if len(self.songs) > 0 and not voice_client.is_playing():
 
-            audio_path = self.songs.pop()
             # Plays the audio in the channel
-            guild = ctx.guild
-            voice_client: discord.VoiceClient = discord.utils.get(self.bot.voice_clients, guild=guild)
-            audio_source = discord.FFmpegPCMAudio(audio_path)
-
-            #self.songs.append(audio_source)
-            if not voice_client.is_playing():
-                voice_client.play(audio_source, after=None)
+            audio_info = self.songs.pop()
+            self.__playsong__(audio_info[0], audio_info[1])
+            
 
 
     @commands.command(pass_context=True)
@@ -69,40 +79,34 @@ class Music(commands.Cog):
         audio.download(filepath="audio")
         audio_path = "audio/" + audio.title + ".webm"
 
-        # Plays the audio in the channel
-        guild = ctx.guild
-        voice_client: discord.VoiceClient = discord.utils.get(self.bot.voice_clients, guild=guild)
-        audio_source = discord.FFmpegPCMAudio(audio_path)
+        # Plays the song
+        self.__playsong__(ctx, audio_path)
 
-        #self.songs.append(audio_source)
-        if not voice_client.is_playing():
-            voice_client.play(audio_source, after=None)
-            await ctx.send("Playing song")
-        else:
-            voice_client.pause()
-            voice_client.play(audio_source, after=None)
-            await ctx.send("Replacing song")
+        await ctx.send("Playing song")
+
     
     @commands.command()
-    async def queue(self, ctx, url):
+    async def queue(self, ctx, url:str):
+        """Queues to the next song. It will be placed in a queue."""
         # Gets the video and audio stream
         video = pafy.new(url)
-        #self.songs[video.title] = video
         audio = video.getbestaudio()
         audio.download(filepath="audio")
         audio_path = "audio/" + audio.title +".webm"
 
-        # Plays the audio in the channel
-        # guild = ctx.guild
-        # voice_client: discord.VoiceClient = discord.utils.get(self.bot.voice_clients, guild=guild)
-        # audio_source = discord.FFmpegPCMAudio(audio_path)
+        # Adds it to the queue
+        audio_tup = (ctx, audio_path)
+        self.songs.append(audio_tup)
 
-        self.songs.append(audio_path)
+        # Sends a message
+        await ctx.send("Queued up!!")
         
     @commands.command()
     async def skip(self, ctx):
-        self.songs.pop()
-        self.play_queue.start()
+        """Skips to the next song"""
+        audio_info = self.songs.pop()
+        self.__playsong__(audio_info[0], audio_info[1])
+        await ctx.send("Going to the next song")
 
 
     @commands.command()
@@ -117,18 +121,9 @@ class Music(commands.Cog):
         else:
             await ctx.send("But music wasn't playing")
     
-    @commands.command()
-    async def execute_66(self, ctx):
-        
-        await ctx.send("")
-    
     # @commands.command()
-    # async def resume(self, ctx):
-    #     guild = ctx.guild
-    #     voice_client: discord.VoiceClient = discord.utils.get(self.bot.voice_clients, guild=guild)
-    #     #audio_source = discord.FFmpegPCMAudio(audio_path)
-    #     if voice_client.is_playing():
-    #         voice_client.resume()
+    # async def execute_66(self, ctx):
+    #     await ctx.send("")
 
 def setup(bot):
     bot.add_cog(Music(bot))
